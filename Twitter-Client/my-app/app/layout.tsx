@@ -1,10 +1,13 @@
-"use client"
+'use client'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter,Quicksand } from 'next/font/google'
-import { GoogleOAuthProvider } from '@react-oauth/google'
+import AuthProvider from './components/AuthProvider/AuthProvider';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 const inter = Inter({ subsets: ['latin'] })
 const quicksand = Quicksand({ subsets: ['latin'] })
+
 
 
 
@@ -23,10 +26,16 @@ export default function RootLayout({
      
       <div className={inter.className} >
       
-      <body > <GoogleOAuthProvider clientId='270812207045-774f9vvqijam6stisa5e6uld8msmn48t.apps.googleusercontent.com'>  {children} </GoogleOAuthProvider></body>
+      <body > 
+      <GoogleOAuthProvider clientId='270812207045-pseeob6k94e9ri92t3n51eb5h9gi4s8l.apps.googleusercontent.com'>
+         {children}
+      </GoogleOAuthProvider>
+         </body>
       </div>
       
     
     </html>
   )
 }
+
+

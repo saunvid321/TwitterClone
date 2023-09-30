@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React from 'react';
 import Image from 'next/image'
 import {BsTwitter } from 'react-icons/bs'
@@ -9,9 +9,10 @@ import {MdEmail} from 'react-icons/md'
 import {BsFillBookmarksFill} from 'react-icons/bs'
 import {CgProfile} from 'react-icons/cg'
 import {CiCircleMore} from 'react-icons/ci'
-import {GoogleLogin} from '@react-oauth/google'
+import { GoogleLogin } from '@react-oauth/google';
 
-import FeedCard from '@/components/FeedCard';
+
+import FeedCard from '@/app/components/FeedCard';
 
 
 
@@ -54,6 +55,7 @@ const sidebarMenuItems:TwitterSidebarButton[]=[
 ]
 
 export default function Home() {
+
   return (
     <div  >
       <div className='grid grid-cols-12 h-screen w-screen px-56 '>
@@ -90,9 +92,12 @@ export default function Home() {
         
         </div>
         <div className='col-span-3 p-5'>
+         
           <div className='p-5 bg-slate-600 rounded-lg'>
-            <h1 className='my-2 text-2xl'>New to Twitter?</h1>
+            <h1 className='my-2 text-2xl'>New to Twitter?</h1> 
             <GoogleLogin onSuccess={(cred)=>console.log(cred)} />
+       
+          
           </div>
         </div>
 
