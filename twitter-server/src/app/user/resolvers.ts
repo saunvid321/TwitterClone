@@ -14,6 +14,7 @@ interface GoogleTokenResult{
     nbf?: string;
     picture?: string;
     given_name: string;
+    last_name: string;
     locale?: string;
     iat?: string;
     exp?: string;
@@ -43,11 +44,13 @@ const queries={
         });
 
         if(!user){
+            
             await prismaClient.user.create({
                 data:{
                     email: data.email,
                     firstName:data.given_name,
                     profileImageURL:data.picture,
+                    lastName:data.last_name
                 },
             });
         }
@@ -61,8 +64,13 @@ const queries={
     },
 
     getCurrentUser:async (parent:any, args:any, ctx:GraphqlContext) => {
-        return ctx.user;
+        const id=ctx.user?.id;
+        if(!id){
+            return null;
+        };
+        const user=await prismaClient.user.findUnique({where:{id}});
+        return user;
         
-    }
+    },
 };
 export const resolvers={queries};

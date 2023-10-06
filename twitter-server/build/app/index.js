@@ -19,6 +19,7 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 // import { prismaClient } from '../clients/db/index';
 const user_1 = require("./user");
+const tweets_1 = require("./tweets");
 const cors_1 = __importDefault(require("cors"));
 const jwt_1 = __importDefault(require("../services/jwt"));
 function initServer() {
@@ -29,12 +30,18 @@ function initServer() {
         const graphqlserver = new server_1.ApolloServer({
             typeDefs: `
             ${user_1.User.types}
+            ${tweets_1.Tweet.types}
             type Query{
                 ${user_1.User.queries}
             }
+            
+
         `,
             resolvers: {
                 Query: Object.assign({}, user_1.User.resolvers.queries),
+                // Mutation:{
+                //     ...Tweet.resolvers.mutations,
+                // }
             },
         });
         yield graphqlserver.start();
