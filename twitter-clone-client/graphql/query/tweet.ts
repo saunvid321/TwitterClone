@@ -24,4 +24,4 @@ query GetSignedURL ( $imageName: String!, $imageType: String!) {
  
   getSignedURLForTweet(imageName: $imageName, imageType: $imageType)
 }
-`)
+`);

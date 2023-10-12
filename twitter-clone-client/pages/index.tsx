@@ -23,7 +23,7 @@ export default function Home(props: HomeProps) {
   const { mutate } = useCreateTweet();
 
   const [content, setContent] = useState("");
-  const [ImageURL,setImageURL]=useState("");
+  const [imageURL,setImageURL]=useState("");
 
   const handelInputChangeFile=useCallback((input: HTMLInputElement)=>{
     return  async (event:Event)=>{
@@ -68,8 +68,9 @@ export default function Home(props: HomeProps) {
   const handleCreateTweet = useCallback(() => {
     mutate({
       content,
+      imageURL,
     });
-  }, [content, mutate]);
+  }, [content, mutate, imageURL]);
 
   return (
     <div>
@@ -97,15 +98,15 @@ export default function Home(props: HomeProps) {
                   rows={3}
                 ></textarea>
                 {
-                  ImageURL && <Image 
-                  src={ImageURL} 
+                  imageURL && <Image 
+                  src={imageURL} 
                   alt="tweet-image" 
                   width={300} height={300}/>
                 }
                 <div className="mt-2 flex justify-between items-center">
                   <BiImageAlt onClick={handleSelectImage} className="text-xl" />
                   <button
-                    onClick={(cred)=>console.log(cred)}
+                    onClick={handleCreateTweet}
                     className="bg-[#1d9bf0] font-semibold text-sm py-2 px-4 rounded-full"
                   >
                     Tweet

@@ -25,13 +25,13 @@ const queries = {
   )=>{
     if(!ctx.user || !ctx.user.id) throw new Error("User is not authenticated");
 
-    const allowedTypes=['jpg','jpeg', "png","webp"];
+    const allowedTypes=['image/jpg','image/jpeg', "image/png", "image/webp"];
 
-    if(!allowedTypes.includes(imageType)) throw new Error("Image type not supported");
+    if(!allowedTypes.includes(imageType)) throw new Error("Image type is not supported");
 
     const putObjectCommand=new PutObjectCommand({
       Bucket: 'saunvid-twitter-dev',
-      Key: `/downloads/${ctx.user.id}/tweets/${imageName}-${Date.now()}.${imageType} `,
+      Key: `uploads/${ctx.user.id}/tweets/${imageName}-${Date.now()}.${imageType} `,
     });
 
     const signeUrl=await getSignedUrl(s3Client,putObjectCommand);
