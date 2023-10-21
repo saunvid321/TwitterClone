@@ -1,22 +1,19 @@
 import { Tweet } from "@prisma/client";
 import {S3Client, PutObjectCommand} from '@aws-sdk/client-s3'
-import { prismaClient } from "../../clients/db";
 import { GraphqlContext } from "../../intefaces";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import UserService from "../../services/user";
+import TweetService, { CreateTweetPayload } from "../../services/tweet";
 
 
-interface CreateTweetPayload {
-  content: string;
-  imageURL?: string;
-}
+
 const s3Client=new S3Client({
-  region: "us-west-1",
-  credentials: {accessKeyId:"AKIAVDBZSO6BNZTBBFVW", secretAccessKey:"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"},
+  region: process.env.AWS_DEFAULT_REGION,
 });
+ 
 
 const queries = {
-  getAllTweets: () =>
-    prismaClient.tweet.findMany({ orderBy: { createdAt: "desc" } }),
+  getAllTweets: () => TweetService.getAllTweets(),
   
   getSignedURLForTweet: async(
     parent:any, 
@@ -30,7 +27,8 @@ const queries = {
     if(!allowedTypes.includes(imageType)) throw new Error("Image type is not supported");
 
     const putObjectCommand=new PutObjectCommand({
-      Bucket: 'saunvid-twitter-dev',
+      Bucket: process.env.AWS_S3_BUCKET ,
+      ContentType: imageType,
       Key: `uploads/${ctx.user.id}/tweets/${imageName}-${Date.now()}.${imageType} `,
     });
 
@@ -52,13 +50,11 @@ const mutations = {
     ctx: GraphqlContext
   ) => {
     if (!ctx.user) throw new Error("You are not authenticated");
-    const tweet = await prismaClient.tweet.create({
-      data: {
-        content: payload.content,
-        imageURL: payload.imageURL,
-        author: { connect: { id: ctx.user.id } },
-      },
+    const tweet = await TweetService.createTweet({
+      ...payload,
+      userId: ctx.user.id,
     });
+   
 
     return tweet;
   },
@@ -67,8 +63,8 @@ const mutations = {
 const extraResolvers = {
   Tweet: {
     author: (parent: Tweet) =>
-      prismaClient.user.findUnique({ where: { id: parent.authorId } }),
+       UserService.getCurrentUserById(parent.authorId),
   },
 };
 
-export const resolvers = { mutations, extraResolvers, queries,s3Client };
+export const resolvers = { mutations, extraResolvers, queries };
