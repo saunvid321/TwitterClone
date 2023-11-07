@@ -14,6 +14,7 @@ import {
   unfollowUserMutation,
 } from "@/graphql/mutation/user";
 import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 interface ServerProps {
   userInfo?: User;
@@ -53,8 +54,8 @@ const UserProfilePage: NextPage<ServerProps> = (props) => {
     <div>
       <Twitterlayout>
         <div>
-          <nav className="flex items-center gap-3 py-3 px-3">
-            <BsArrowLeftShort className="text-4xl" />
+          <nav  className="flex items-center gap-3 py-3 px-3">
+          <Link href='http://localhost:3000/' > <BsArrowLeftShort className="text-4xl" /></Link>
             <div>
               <h1 className="text-2xl font-bold">
                 {props.userInfo?.firstName} {props.userInfo?.lastName}
